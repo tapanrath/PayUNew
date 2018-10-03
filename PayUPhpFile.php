@@ -1,3 +1,5 @@
+<html>
+<body>
 <?php
 /**
  * Created by Tapan Kumar.
@@ -53,3 +55,5 @@ $arr['responseCode']=null;
 $output=$arr;
 echo json_encode($output);
 ?>
+</body>
+ </html>
