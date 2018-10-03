@@ -20,11 +20,6 @@ function getHashes($txnid, $amount, $productinfo, $firstname, $email, $user_cred
       $mobileSdk = strtolower(hash('sha512', $mobileSdk_str));
       $arr['vas_for_mobile_sdk_hash'] = $mobileSdk;
 
-// added code for EMI hash
-      $cmnEmiAmountAccordingToInterest= 'getEmiAmountAccordingToInterest';
-      $emi_str = $key . '|' . $cmnEmiAmountAccordingToInterest . '|'.checkNull($amount).'|' . $salt;
-      $mobileEmiString = strtolower(hash('sha512', $emi_str));
-     $arr['emi_hash'] = $mobileEmiString;
 
 
       $cmnPaymentRelatedDetailsForMobileSdk1 = 'payment_related_details_for_mobile_sdk';
@@ -37,54 +32,6 @@ function getHashes($txnid, $amount, $productinfo, $firstname, $email, $user_cred
       $verifyPayment_str = $key . '|' . $cmnVerifyPayment . '|'.$txnid .'|' . $salt;
       $verifyPayment = strtolower(hash('sha512', $verifyPayment_str));
       $arr['verify_payment_hash'] = $verifyPayment;
-
-      if($user_credentials != NULL && $user_credentials != '')
-      {
-            $cmnNameDeleteCard = 'delete_user_card';
-            $deleteHash_str = $key  . '|' . $cmnNameDeleteCard . '|' . $user_credentials . '|' . $salt ;
-            $deleteHash = strtolower(hash('sha512', $deleteHash_str));
-            $arr['delete_user_card_hash'] = $deleteHash;
-
-            $cmnNameGetUserCard = 'get_user_cards';
-            $getUserCardHash_str = $key  . '|' . $cmnNameGetUserCard . '|' . $user_credentials . '|' . $salt ;
-            $getUserCardHash = strtolower(hash('sha512', $getUserCardHash_str));
-            $arr['get_user_cards_hash'] = $getUserCardHash;
-
-            $cmnNameEditUserCard = 'edit_user_card';
-            $editUserCardHash_str = $key  . '|' . $cmnNameEditUserCard . '|' . $user_credentials . '|' . $salt ;
-            $editUserCardHash = strtolower(hash('sha512', $editUserCardHash_str));
-            $arr['edit_user_card_hash'] = $editUserCardHash;
-
-            $cmnNameSaveUserCard = 'save_user_card';
-            $saveUserCardHash_str = $key  . '|' . $cmnNameSaveUserCard . '|' . $user_credentials . '|' . $salt ;
-            $saveUserCardHash = strtolower(hash('sha512', $saveUserCardHash_str));
-            $arr['save_user_card_hash'] = $saveUserCardHash;
-
-            $cmnPaymentRelatedDetailsForMobileSdk = 'payment_related_details_for_mobile_sdk';
-            $detailsForMobileSdk_str = $key  . '|' . $cmnPaymentRelatedDetailsForMobileSdk . '|' . $user_credentials . '|' . $salt ;
-            $detailsForMobileSdk = strtolower(hash('sha512', $detailsForMobileSdk_str));
-            $arr['payment_related_details_for_mobile_sdk_hash'] = $detailsForMobileSdk;
-      }
-
-
-      // if($udf3!=NULL && !empty($udf3)){
-            $cmnSend_Sms='send_sms';
-            $sendsms_str=$key . '|' . $cmnSend_Sms . '|' . $udf3 . '|' . $salt;
-            $send_sms = strtolower(hash('sha512',$sendsms_str));
-            $arr['send_sms_hash']=$send_sms;
-      // }
-
-
-
-            if ($cardBin!=NULL && !empty($cardBin)) {
-                  $cmnCheckIsDomestic = 'check_isDomestic';
-                        $checkIsDomestic_str = $key  . '|' . $cmnCheckIsDomestic . '|' . $cardBin . '|' . $salt ;
-                  $checkIsDomestic = strtolower(hash('sha512', $checkIsDomestic_str));
-                  $arr['check_isDomestic_hash']=$checkIsDomestic;
-            }
-
-
-
     return $arr;
 }
 
