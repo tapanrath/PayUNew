@@ -1,40 +1,32 @@
-  <?php
-
-$key=$_POST["key"];
-
-$salt="JEoXThKDZm"; #your payumoney salt
-$txnId=$_POST["txnid"];
+<?php
+$status=$_POST["status"];
+$firstname=$_POST["firstname"];
 $amount=$_POST["amount"];
-$productName=$_POST["productInfo"];
-$firstName=$_POST["firstName"];
+$txnid=$_POST["txnid"];
+$posted_hash=$_POST["hash"];
+$key=$_POST["key"];
+$productinfo=$_POST["productinfo"];
 $email=$_POST["email"];
-$udf1=$_POST["udf1"];
-$udf2=$_POST["udf2"];
-$udf3=$_POST["udf3"];
-$udf4=$_POST["udf4"];
-$udf5=$_POST["udf5"];
 
-$payhash_str = $key . '|' . checkNull($txnId) . '|' .checkNull($amount)  . '|' .checkNull($productName)  . '|' . checkNull($firstName) . '|' . checkNull($email) . '|' . checkNull($udf1) . '|' . checkNull($udf2) . '|' . checkNull($udf3) . '|' . checkNull($udf4) . '|' . checkNull($udf5) . '|' . $salt;
+$salt="JEoXThKDZm"; // PLACE YOUR SALT KEY HERE
 
+// Salt should be same Post Request
+if(isset($_POST["additionalCharges"])){
+  $additionalCharges=$_POST["additionalCharges"];
+  $retHashSeq = $additionalCharges.'|'.$salt.'|'.$status.'|||||||||||'.$email.'|'.$firstname.'|'.$productinfo.'|'.$amount.'|'.$txnid.'|'.$key;
+}else{
+  $retHashSeq = $salt.'|'.$status.'|||||||||||'.$email.'|'.$firstname.'|'.$productinfo.'|'.$amount.'|'.$txnid.'|'.$key;
+}
 
-function checkNull($value) {
-            if ($value == null) {
-                  return '';
-            } else {
-                  return $value;
-            }
-      }
+$hash = strtolower(hash('sha512', $retHashSeq)); // NOTE: THIS PART IN YOUR KIT MAY HAVE AN ERROR. THERE YOU MIGHT GET $hash_string instead of $retHashSeq. JUST REPLACE $hash_string with $retHashSeq.
 
-
-$hash = strtolower(hash('sha512', $payhash_str));
-$arr['result'] = $hash;
-$arr['status']=0;
-$arr['errorCode']=null;
-$arr['responseCode']=null;
-$arr['hashtest']=$payhash_str;
-$output=$arr;
-
-
-echo json_encode($output);
-
+if($hash != $posted_hash){
+  // Transaction completed but is Invalid as Hash Values are not Matching. Notify Admin.
+  //header('Location: fail.php');
+  //exit();
+}else{
+  // Transaction is Valid. Process orders here.
+  //header('Location: thanks.php');
+  //exit();
+}
 ?>
