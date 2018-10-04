@@ -1,30 +1,41 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title><?php pageTitle(); ?> | <?php siteName(); ?></title>
-    <style type="text/css">
-        .wrap { max-width: 720px; margin: 50px auto; padding: 30px 40px; text-align: center; box-shadow: 0 4px 25px -4px #9da5ab; }
-        article { text-align: left; padding: 40px; line-height: 150%; }
-    </style>
-</head>
-<body>
-<div class="wrap">
+  <?php
 
-    <header>
-        <h2><?php siteName(); ?></h2>
-        <nav class="menu">
-            <?php navMenu(); ?>
-        </nav>
-    </header>
+ $key=$_POST["key"];
 
-    <article>
-        <h3><?php pageTitle(); ?></h3>
-        <?php pageContent(); ?>
-    </article>
+ $salt="JEoXThKDZm";
+ $txnId=$_POST["txnid"];
+ $amount=$_POST["amount"];
+ $productName=$_POST["productInfo"];
+ $firstName=$_POST["firstName"];
+ $email=$_POST["email"];
+ $udf1=$_POST["udf1"];ch
+ $udf2=$_POST["udf2"];
+ $udf3=$_POST["udf3"];
+ $udf4=$_POST["udf4"];
+ $udf5=$_POST["udf5"];
 
-    <footer><small>&copy;<?php echo date('Y'); ?> <?php siteName(); ?>.<br><?php siteVersion(); ?></small></footer>
+ $payhash_str = $key . '|' . checkNull($txnId) . '|' .checkNull($amount)  . '|' .checkNull($productName)  . '|' . checkNull($firstName) . '|' . checkNull($email) . '|' . checkNull($udf1) . '|' . checkNull($udf2) . '|' . checkNull($udf3) . '|' . checkNull($udf4) . '|' . checkNull($udf5) . '|' . $salt;
 
-</div>
-</body>
-</html>
+
+ function checkNull($value) {
+             if ($value == null) {
+                   return '';
+             } else {
+                   return $value;
+             }
+       }
+
+
+ $hash = strtolower(hash('sha512', $payhash_str));
+ $arr['result'] = $hash;
+ $arr['status']=0;
+ $arr['errorCode']=null;
+ $arr['responseCode']=null;
+ $arr['hashtest']=$payhash_str;
+ $output=$arr;
+
+
+ echo json_encode($output);
+
+ ?>
+
