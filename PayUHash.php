@@ -1,6 +1,7 @@
   <?php
-
- $key=$_POST["key"];
+function getHashes($txnid, $amount, $productinfo, $firstname, $email, $user_credentials, $udf1, $udf2, $udf3, $udf4, $udf5,$offerKey,$cardBin)
+{
+  $key=$_POST["key"];
 
  $salt="JEoXThKDZm";
  $txnId=$_POST["txnid"];
@@ -15,7 +16,7 @@
  $udf5=$_POST["udf5"];
 
  $payhash_str = $key . '|' . checkNull($txnId) . '|' .checkNull($amount)  . '|' .checkNull($productName)  . '|' . checkNull($firstName) . '|' . checkNull($email) . '|' . checkNull($udf1) . '|' . checkNull($udf2) . '|' . checkNull($udf3) . '|' . checkNull($udf4) . '|' . checkNull($udf5) . '|' . $salt;
-
+}
 
  function checkNull($value) {
              if ($value == null) {
