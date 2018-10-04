@@ -36,6 +36,8 @@ function getHashes($txnid, $amount, $productinfo, $firstname, $email, $user_cred
  $output=$arr;
 
 
+$output=getHashes($_POST["txnid"], $_POST["amount"], $_POST["productinfo"], $_POST["firstname"], $_POST["email"], $_POST["user_credentials"], $_POST["udf1"], $_POST["udf2"], $_POST["udf3"], $_POST["udf4"], $_POST["udf5"],$_POST["offerKey"],$_POST["cardBin"]);
+
  echo json_encode($output);
 
  ?>
