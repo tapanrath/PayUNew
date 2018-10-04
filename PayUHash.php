@@ -22,7 +22,7 @@ $udf1, $udf2, $udf3, $udf4, $udf5,$offerKey,$cardBin)
 {
 // $firstname, $email can be "", i.e empty string if needed. Same should be sent to PayU
 server (in request params) also.
-$key = 'XXXXXX';
+$key = 'uWnwLgWB';
 $salt = 'JEoXThKDZm';
 $payhash_str = $key . '|' . checkNull($txnid) . '|' .checkNull($amount) . '|'
 .checkNull($productinfo) . '|' . checkNull($firstname) . '|' . checkNull($email) . '|' .
