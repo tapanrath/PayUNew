@@ -1,9 +1,7 @@
 
 /**
 
- */
 
-/**************
 
 Below is the test card details for doing a test transaction in the testing mode.
 
@@ -15,7 +13,7 @@ CVV - 12
 $salt="JEoXThKDZm"; // add salt here from your credentials in payUMoney dashboard
 */
 
-<? php
+<?php
 
 $key=$_POST["key"];
 
