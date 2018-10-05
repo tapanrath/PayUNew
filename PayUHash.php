@@ -1,18 +1,3 @@
-
-/**
-
-
-
-Below is the test card details for doing a test transaction in the testing mode.
-
-Card No - 5123456789012346
-Expiry - 05/2020
-CVV - 12
-
-
-$salt="JEoXThKDZm"; // add salt here from your credentials in payUMoney dashboard
-*/
-
 <?php
 
 $key=$_POST["key"];
