@@ -1,84 +1,55 @@
 <?php
- 
-function getHashes($txnid, $amount, $productinfo, $firstname, $email, $user_credentials, $udf1, $udf2, $udf3, $udf4, $udf5)
-{
- // $firstname, $email can be "", i.e empty string if needed. Same should be sent to PayU server (in request params) also.
- $key = 'uWnwLgWB';
- $salt = 'JEoXThKDZm';
- 
- $payhash_str = $key . '|' . checkNull($txnid) . '|' .checkNull($amount) . '|' .checkNull($productinfo) . '|' . checkNull($firstname) . '|' . checkNull($email) . '|' . checkNull($udf1) . '|' . checkNull($udf2) . '|' . checkNull($udf3) . '|' . checkNull($udf4) . '|' . checkNull($udf5) . '||||||' . $salt;
- $paymentHash = strtolower(hash('sha512', $payhash_str));
- $arr['payment_hash'] = $paymentHash;
- 
- $cmnNameMerchantCodes = 'get_merchant_ibibo_codes';
- $merchantCodesHash_str = $key . '|' . $cmnNameMerchantCodes . '|default|' . $salt ;
- $merchantCodesHash = strtolower(hash('sha512', $merchantCodesHash_str));
- $arr['get_merchant_ibibo_codes_hash'] = $merchantCodesHash;
- 
- $cmnMobileSdk = 'vas_for_mobile_sdk';
- $mobileSdk_str = $key . '|' . $cmnMobileSdk . '|default|' . $salt;
- $mobileSdk = strtolower(hash('sha512', $mobileSdk_str));
- $arr['vas_for_mobile_sdk_hash'] = $mobileSdk;
- 
- $cmnPaymentRelatedDetailsForMobileSdk1 = 'payment_related_details_for_mobile_sdk';
- $detailsForMobileSdk_str1 = $key . '|' . $cmnPaymentRelatedDetailsForMobileSdk1 . '|default|' . $salt ;
- $detailsForMobileSdk1 = strtolower(hash('sha512', $detailsForMobileSdk_str1));
- $arr['payment_related_details_for_mobile_sdk_hash'] = $detailsForMobileSdk1;
- 
- //used for verifying payment(optional) 
- $cmnVerifyPayment = 'verify_payment';
- $verifyPayment_str = $key . '|' . $cmnVerifyPayment . '|'.$txnid .'|' . $salt;
- $verifyPayment = strtolower(hash('sha512', $verifyPayment_str));
- $arr['verify_payment_hash'] = $verifyPayment;
- 
- if($user_credentials != NULL & $user_credentials != '')
- {
- $cmnNameDeleteCard = 'delete_user_card';
- $deleteHash_str = $key . '|' . $cmnNameDeleteCard . '|' . $user_credentials . '|' . $salt ;
- $deleteHash = strtolower(hash('sha512', $deleteHash_str));
- $arr['delete_user_card_hash'] = $deleteHash;
- 
- $cmnNameGetUserCard = 'get_user_cards';
- $getUserCardHash_str = $key . '|' . $cmnNameGetUserCard . '|' . $user_credentials . '|' . $salt ;
- $getUserCardHash = strtolower(hash('sha512', $getUserCardHash_str));
- $arr['get_user_cards_hash'] = $getUserCardHash;
- 
- $cmnNameEditUserCard = 'edit_user_card';
- $editUserCardHash_str = $key . '|' . $cmnNameEditUserCard . '|' . $user_credentials . '|' . $salt ;
- $editUserCardHash = strtolower(hash('sha512', $editUserCardHash_str));
- $arr['edit_user_card_hash'] = $editUserCardHash;
- 
- $cmnNameSaveUserCard = 'save_user_card';
- $saveUserCardHash_str = $key . '|' . $cmnNameSaveUserCard . '|' . $user_credentials . '|' . $salt ;
- $saveUserCardHash = strtolower(hash('sha512', $saveUserCardHash_str));
- $arr['save_user_card_hash'] = $saveUserCardHash;
- 
- $cmnPaymentRelatedDetailsForMobileSdk = 'payment_related_details_for_mobile_sdk';
- $detailsForMobileSdk_str = $key . '|' . $cmnPaymentRelatedDetailsForMobileSdk . '|' . $user_credentials . '|' . $salt ;
- $detailsForMobileSdk = strtolower(hash('sha512', $detailsForMobileSdk_str));
- $arr['payment_related_details_for_mobile_sdk_hash'] = $detailsForMobileSdk;
- }
- 
- 
- // if($udf3!=NULL &amp;&amp; !empty($udf3)){
- $cmnSend_Sms='send_sms';
- $sendsms_str=$key . '|' . $cmnSend_Sms . '|' . $udf3 . '|' . $salt;
- $send_sms = strtolower(hash('sha512',$sendsms_str));
- $arr['send_sms_hash']=$send_sms;
- // }
- 
- return $arr;
-}
- 
+/**
+ * Created by PhpStorm.
+ * User: Mayur Dusane
+ * Date: 21-12-2017
+ * Time: 11:27
+ */
+
+/**************
+
+Below is the test card details for doing a test transaction in the testing mode.
+
+Card No - 5123456789012346
+Expiry - 05/2020
+CVV - 123
+
+****************/
+
+/***************** NECESSARY FIELDS GOES HERE ***********************/
+$key=$_POST["key"]; //posted merchant key from client
+$salt="JEoXThKDZm"; // add salt here from your credentials in payUMoney dashboard
+$txnId=$_POST["txnid"]; //posted txnid from client
+$amount=$_POST["amount"]; //posted amount from client 
+$productName=$_POST["productInfo"]; // posted product info from client
+$firstName=$_POST["firstName"]; // posted firstname from and must be without space
+$email=$_POST["email"]; // posted email from client
+
+/***************** USER DEFINED VARIABLES GOES HERE ***********************/
+//all varibles posted from client
+$udf1=$_POST["udf1"];
+$udf2=$_POST["udf2"];
+$udf3=$_POST["udf3"];
+$udf4=$_POST["udf4"];
+$udf5=$_POST["udf5"];
+
+/***************** DO NOT EDIT ***********************/
+$payhash_str = $key . '|' . checkNull($txnId) . '|' .checkNull($amount)  . '|' .checkNull($productName)  . '|' . checkNull($firstName) . '|' . checkNull($email) . '|' . checkNull($udf1) . '|' . checkNull($udf2) . '|' . checkNull($udf3) . '|' . checkNull($udf4) . '|' . checkNull($udf5) . '||||||'. $salt;
+
 function checkNull($value) {
- if ($value == null) {
- return '';
- } else {
- return $value;
- }
- }
- 
-$output=getHashes($_POST["txnid"], $_POST["amount"], $_POST["productinfo"], $_POST["firstname"], $_POST["email"], $_POST["user_credentials"], $_POST["udf1"], $_POST["udf2"], $_POST["udf3"], $_POST["udf4"], $_POST["udf5"]);
- 
+            if ($value == null) {
+                  return '';
+            } else {
+                  return $value;
+            }
+      }
+$hash = strtolower(hash('sha512', $payhash_str));
+/***************** DO NOT EDIT ***********************/
+
+$arr['result'] = $hash;
+$arr['status']=0;
+$arr['errorCode']=null;
+$arr['responseCode']=null;
+$output=$arr;
 echo json_encode($output);
- ?>
+?>
